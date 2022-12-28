@@ -97,13 +97,14 @@ export const AppContext = createContext();
 export const AppProvider = (props) => {
     // 4. Sets up the app state. takes a reducer, and an initial state
     const [state, dispatch] = useReducer(AppReducer, initialState);
+    let spent = 0;
     let remaining = 0;
 
     if (state.expenses) {
-            const totalExpenses = state.expenses.reduce((total, item) => {
+        spent = state.expenses.reduce((total, item) => {
             return (total = total + item.cost);
         }, 0);
-        remaining = state.budget - totalExpenses;
+        remaining = state.budget - spent;
     }
 
     return (
@@ -111,6 +112,7 @@ export const AppProvider = (props) => {
             value={{
                 expenses: state.expenses,
                 budget: state.budget,
+                spent: spent,
                 remaining: remaining,
                 dispatch,
                 currency: state.currency
